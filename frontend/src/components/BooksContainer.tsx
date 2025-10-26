@@ -1,3 +1,5 @@
+// src/components/BooksContainer.tsx
+
 import { Book } from '../types/book';
 import BookCard from './BookCard';
 import './BooksContainer.css';
@@ -8,7 +10,7 @@ interface BooksContainerProps {
 
 function BooksContainer({ books }: BooksContainerProps) {
     return (
-        <div className="books-container" id="books">
+        <div className="books-container">
             {books.length === 0 ? (
                 <div className="no-books">
                     <p>Nenhum livro encontrado na biblioteca</p>
