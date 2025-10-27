@@ -1,13 +1,12 @@
-// src/App.tsx
+// src/App.jsx
 
 import { useState, useEffect } from 'react';
 import Header from './components/Header';
 import BooksContainer from './components/BooksContainer';
-import { Book } from './types/book';
 import './App.css';
 
 // Dados mockados para desenvolvimento
-const mockBooks: Book[] = [
+const mockBooks = [
   {
     id: 1,
     title: "1984",
@@ -53,17 +52,20 @@ const mockBooks: Book[] = [
 ];
 
 function App() {
-  const [books, setBooks] = useState<Book[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [books, setBooks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     console.log('App montado - iniciando carregamento');
-    // Simula carregamento de dados
-    // Futuramente, você vai fazer fetch da sua API FastAPI aqui
+    
     const loadBooks = async () => {
       try {
         // TODO: Substituir por fetch real da API
         // const response = await fetch('http://localhost:8000/api/books');
+        // if (!response.ok) {
+        //   throw new Error('Falha ao carregar livros');
+        // }
         // const data = await response.json();
         // setBooks(data);
         
@@ -73,8 +75,9 @@ function App() {
           setBooks(mockBooks);
           setLoading(false);
         }, 500);
-      } catch (error) {
-        console.error('Erro ao carregar livros:', error);
+      } catch (err) {
+        console.error('Erro ao carregar livros:', err);
+        setError(err.message || 'Erro ao carregar livros');
         setLoading(false);
       }
     };
@@ -91,6 +94,13 @@ function App() {
         {loading ? (
           <div className="loading">
             <p>Carregando biblioteca...</p>
+          </div>
+        ) : error ? (
+          <div className="error">
+            <p>Erro: {error}</p>
+            <button onClick={() => window.location.reload()}>
+              Tentar novamente
+            </button>
           </div>
         ) : (
           <BooksContainer books={books} />
